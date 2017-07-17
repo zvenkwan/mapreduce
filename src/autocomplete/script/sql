@@ -1,0 +1,4 @@
+create table ngram_language_model (
+    starting_phrase varchar(300), 
+    following_word varchar(40),
+    appearance int);
