@@ -79,7 +79,7 @@ public class SentimentAnalysis {
         File f = new File(args[2]);
 //        System.out.println(f.getAbsolutePath());
         System.out.println(f.exists());
-        Job job = new Job(configuration);
+        Job job = Job.getInstance(configuration);
 //        Job job = Job.getInstance(configuration);
         job.setJarByClass(SentimentAnalysis.class);
         job.setMapperClass(SentimentSplit.class);
