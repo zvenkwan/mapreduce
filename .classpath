@@ -16,5 +16,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/hadoop-mapreduce-client-core-0.23.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/zg55/OneDrive/Documents/Workspace/MapReduce/lib/mysql-connector-java-5.1.42.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
