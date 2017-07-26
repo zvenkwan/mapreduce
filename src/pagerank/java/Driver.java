@@ -16,10 +16,11 @@ public class Driver {
         String prMatrix = args[1];
         String unitState = args[2];
         int count = Integer.parseInt(args[3]);
+        String beta = args[4];
         for(int i=0;  i<count;  i++) {
-            String[] args1 = {transitionMatrix, prMatrix+i, unitState+i};
+            String[] args1 = {transitionMatrix, prMatrix+i, unitState+i, beta};
             UnitMultiplication.main(args1);
-            String[] args2 = {unitState + i, prMatrix+(i+1)};
+            String[] args2 = {unitState + i, prMatrix+(i+1), beta};
             UnitSum.main(args2);
         }
     }
