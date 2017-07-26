@@ -10,6 +10,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.chain.ChainMapper;
 import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -50,6 +51,13 @@ public class UnitMultiplication {
 
     public static class MultiplicationReducer extends Reducer<Text, Text, Text, Text> {
 
+    	float beta;
+    	
+    	@Override
+    	public void setup(Context context) {
+    		Configuration conf = context.getConfiguration();
+    		beta = conf.getFloat("beta", 0.2f);
+    	}
 
         @Override
         public void reduce(Text key, Iterable<Text> values, Context context)
@@ -71,7 +79,7 @@ public class UnitMultiplication {
         	
         	for(String cell : transitionCells) {
         		String[] pair = cell.split("=");
-        		context.write(new Text(pair[0]), new Text(String.valueOf(pr*Double.parseDouble(pair[1]))));
+        		context.write(new Text(pair[0]), new Text(String.valueOf(beta*pr*Double.parseDouble(pair[1]))));
         	}
         }
     }
@@ -79,11 +87,14 @@ public class UnitMultiplication {
     public static void main(String[] args) throws Exception {
 
         Configuration conf = new Configuration();
+        conf.setFloat("beta", Float.parseFloat(args[3]));
         Job job = Job.getInstance(conf);
         job.setJarByClass(UnitMultiplication.class);
 
         //how chain two mapper classes?
-
+        ChainMapper.addMapper(job, TransitionMapper.class, Object.class, Text.class, Text.class, Text.class, conf);
+        ChainMapper.addMapper(job, PRMapper.class, Object.class, Text.class, Text.class, Text.class, conf);
+        
         job.setReducerClass(MultiplicationReducer.class);
 
         job.setOutputKeyClass(Text.class);
